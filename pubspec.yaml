@@ -64,7 +64,14 @@ flutter:
     - assets/icons/backspace.svg
     - assets/icons/lightmode.svg
     - assets/icons/darkmode.svg
-    
+    - assets/icons/multiplication.svg
+    - assets/icons/division.svg
+    - assets/icons/plus.svg
+    - assets/icons/expand.svg
+    - assets/icons/minus.svg
+    - assets/icons/percentage.svg
+    - assets/icons/equal.svg
+    - assets/icons/calculate.svg    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

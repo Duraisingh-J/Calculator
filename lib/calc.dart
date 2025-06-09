@@ -102,7 +102,7 @@ class _Calc extends State<Calc> {
     return Column(
       children: [
         SizedBox(
-          height: sizeHeight * 0.18,
+          height: sizeHeight * 0.215,
           width: sizeWidth * 0.95,
 
           child: Container(
@@ -113,7 +113,11 @@ class _Calc extends State<Calc> {
               reverse: true,
               child: Text(
                 input,
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: textColor),
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ),
@@ -130,16 +134,28 @@ class _Calc extends State<Calc> {
               reverse: true,
               child: Text(
                 result,
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: textColor),
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ),
         ),
 
-        SizedBox(height: 40),
-        Button('AC', Color.fromARGB(255, 231, 26, 11), textColor,  () {
-          allClear();
-        }),
+        SizedBox(height: 25),
+        Row(
+          children: [
+            SizedBox(width:15 ),
+            Button('extendOperation', 'assets/icons/expand.svg', Colors.blue, textColor, () {}),
+            SizedBox(width: 15,),
+            Button('AC', 'null', Color.fromARGB(255, 231, 26, 11), textColor, () {
+              allClear();
+            }),
+            SizedBox(width: 15,)
+          ],
+        ),
 
         SizedBox(height: 15),
         Column(
@@ -147,43 +163,67 @@ class _Calc extends State<Calc> {
             Row(
               children: [
                 SizedBox(width: 15, height: 15),
-                Button('/', Colors.greenAccent, textColor, () {
-                  characters("/");
-                }),
+                Button(
+                  '/',
+                  'assets/icons/division.svg',
+                  Colors.greenAccent,
+                  textColor,
+                  () {
+                    characters("/");
+                  },
+                ),
                 SizedBox(width: 15, height: 15),
-                Button('*', Colors.greenAccent, textColor, () {
-                  characters("*");
-                }),
+                Button(
+                  '*',
+                  'assets/icons/multiplication.svg',
+                  Colors.greenAccent,
+                  textColor,
+                  () {
+                    characters("*");
+                  },
+                ),
                 SizedBox(width: 15, height: 15),
-                Button('+', Colors.greenAccent, textColor, () {
-                  characters("+");
-                }),
+                Button(
+                  '+',
+                  'assets/icons/plus.svg',
+                  Colors.greenAccent,
+                  textColor,
+                  () {
+                    characters("+");
+                  },
+                ),
                 SizedBox(width: 15, height: 15),
-                Button('-', Colors.greenAccent, textColor, () {
-                  characters("-");
-                }),
+                Button(
+                  '-',
+                  'assets/icons/minus.svg',
+                  Colors.greenAccent,
+                  textColor,
+                  () {
+                    characters("-");
+                  },
+                ),
               ],
             ),
             SizedBox(height: 15),
             Row(
               children: [
                 SizedBox(width: 15, height: 15),
-                Button('7', buttonColor, textColor, () {
+                Button('7', 'null', buttonColor, textColor, () {
                   characters("7");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('8', buttonColor, textColor, () {
+                Button('8', 'null', buttonColor, textColor, () {
                   characters("8");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('9', buttonColor, textColor, () {
+                Button('9', 'null', buttonColor, textColor, () {
                   characters("9");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('(', Colors.greenAccent, textColor, () {
+                Button('(', 'null', Colors.greenAccent, textColor, () {
                   characters("(");
                 }),
               ],
@@ -192,22 +232,22 @@ class _Calc extends State<Calc> {
             Row(
               children: [
                 SizedBox(width: 15, height: 15),
-                Button('4', buttonColor, textColor, () {
+                Button('4', 'null', buttonColor, textColor, () {
                   characters("4");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('5', buttonColor, textColor, () {
+                Button('5', 'null', buttonColor, textColor, () {
                   characters("5");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('6', buttonColor, textColor, () {
+                Button('6', 'null', buttonColor, textColor, () {
                   characters("6");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button(')', Colors.greenAccent, textColor, () {
+                Button(')', 'null', Colors.greenAccent, textColor, () {
                   characters(")");
                 }),
               ],
@@ -216,22 +256,22 @@ class _Calc extends State<Calc> {
             Row(
               children: [
                 SizedBox(width: 15, height: 15),
-                Button('1', buttonColor, textColor, () {
+                Button('1', 'null', buttonColor, textColor, () {
                   characters("1");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('2', buttonColor, textColor, () {
+                Button('2', 'null', buttonColor, textColor, () {
                   characters("2");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('3', buttonColor, textColor, () {
+                Button('3', 'null', buttonColor, textColor, () {
                   characters("3");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('^', Colors.greenAccent, textColor, () {
+                Button('^', 'null', Colors.greenAccent, textColor, () {
                   characters("^");
                 }),
               ],
@@ -240,24 +280,36 @@ class _Calc extends State<Calc> {
             Row(
               children: [
                 SizedBox(width: 15, height: 15),
-                Button('.', buttonColor, textColor, () {
+                Button('.', 'null', buttonColor, textColor, () {
                   characters(".");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('0', buttonColor, textColor, () {
+                Button('0', 'null', buttonColor, textColor, () {
                   characters("0");
                 }),
 
                 SizedBox(width: 15, height: 15),
-                Button('=', Color.fromARGB(255, 255, 208, 0), textColor, () {
-                  calculation();
-                }),
+                Button(
+                  '=',
+                  'assets/icons/equal.svg',
+                  Color.fromARGB(255, 255, 208, 0),
+                  textColor,
+                  () {
+                    calculation();
+                  },
+                ),
 
                 SizedBox(width: 15, height: 15),
-                Button('X', Colors.redAccent, textColor, () {
-                  delete();
-                }),
+                Button(
+                  'X',
+                  'assets/icons/backspace.svg',
+                  Colors.redAccent,
+                  textColor,
+                  () {
+                    delete();
+                  },
+                ),
               ],
             ),
           ],

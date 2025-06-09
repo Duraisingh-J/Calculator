@@ -6,9 +6,11 @@ class Button extends StatelessWidget {
   final String label;
   final Color bgColor;
   final Color textColor;
+  String symbol;
 
-  const Button(
+  Button(
     this.label,
+    this.symbol,
     this.bgColor,
     this.textColor,
     this.operation, {
@@ -18,45 +20,26 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double sizeWidth = MediaQuery.of(context).size.width;
-    // double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeHeight = MediaQuery.of(context).size.height;
     sizeWidth =
-        (label.compareTo("AC") == 0) ? sizeWidth * 0.8 : sizeWidth * 0.2;
+        (label.compareTo("AC") == 0) ? sizeWidth * 0.68 : sizeWidth * 0.2;
 
-    return (label.compareTo("X") == 0)
-        ? SizedBox(
-          height: 60,
-          width: sizeWidth,
+    return SizedBox(
+      height: 60,
+      width: sizeWidth,
 
-          child: ElevatedButton(
-            onPressed: operation,
+      child: ElevatedButton(
+        onPressed: operation,
 
-            style: ElevatedButton.styleFrom(
-              backgroundColor: bgColor,
-              elevation: 1.0,
-            ),
-            child: SvgPicture.asset(
-              'assets/icons/backspace.svg',
-              height: 35,
-              colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
-            ),
-          ),
-        )
-        : SizedBox(
-          height: 60,
-          width: sizeWidth,
-
-          child: ElevatedButton(
-            onPressed: operation,
-
-            style: ElevatedButton.styleFrom(
-              backgroundColor: bgColor,
-              elevation: 1.0,
-            ),
-            child: Text(
-              label,
-              style: TextStyle(fontSize: 25, color: textColor),
-            ),
-          ),
-        );
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bgColor,
+          elevation: 1.0,
+        ),
+        child:
+            symbol.compareTo('null') == 0
+                ? Text(label, style: TextStyle(fontSize: 25, color: textColor))
+                : SvgPicture.asset(symbol, height: 35, color: textColor),
+      ),
+    );
   }
 }
