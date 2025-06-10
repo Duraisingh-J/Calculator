@@ -1,10 +1,15 @@
+import 'package:calculator/calc_landscape.dart';
+import 'package:calculator/calc_portrait.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
-import 'package:calculator/buttons.dart';
+import 'dart:math' as math;
 
 class Calc extends StatefulWidget {
   final bool isDarkMode;
-  const Calc(this.isDarkMode, {super.key});
+  final bool isPortrait;
+
+  const Calc(this.isDarkMode, this.isPortrait, {super.key});
 
   @override
   State<Calc> createState() {
@@ -17,11 +22,16 @@ class _Calc extends State<Calc> {
   String result = '';
   RegExp mixedPattern = RegExp(r'[\+\-\*\^/]{2,}');
   RegExp startEndPattern = RegExp(r'^[\+\-\*\^/]|[\+\-\*\^/]$');
-  RegExp decimalPointPattern = RegExp(r'\.{2, }|\.$');
+  RegExp decimalPointPattern = RegExp(r'\.{2,}|\.$');
   RegExp numberLimit = RegExp(r'\d+');
+  RegExp trignometricPattern = RegExp(r'(sin|cos|tan)\(([^()]+)\)');
   Color bgColor = Colors.white;
   Color buttonColor = Color.fromARGB(189, 255, 255, 255);
   Color textColor = Colors.black;
+  double textSize = 0;
+  double screenHeight = 0;
+  double screenWidth = 0;
+  double resultScreenHeight = 0;
 
   void characters(String char) {
     setState(() {
@@ -60,9 +70,22 @@ class _Calc extends State<Calc> {
         );
       }
 
+      // ignore: deprecated_member_use
       Parser p = Parser();
-      Expression exp = p.parse(input);
+      Expression exp = p.parse(
+        input.replaceAll('x', '*').replaceAllMapped(trignometricPattern, (
+          match,
+        ) {
+          final func = match.group(1)!;
+          final angleInDegrees = match.group(2);
+          return "$func(($angleInDegrees) * (pi/180))";
+        }),
+      );
+
       ContextModel cm = ContextModel();
+      cm.bindVariable(Variable('pi'), Number(math.pi));
+      cm.bindVariableName('e', Number(math.e));
+
       double value = exp.evaluate(EvaluationType.REAL, cm);
       Iterable<RegExpMatch> numbers = numberLimit.allMatches(input);
 
@@ -87,9 +110,33 @@ class _Calc extends State<Calc> {
     }
   }
 
+  void changePortraitToLandscape() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  void changeLandscapeToPortrait() async {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
+  // void resetOrientation() async {
+  //   await SystemChrome.setPreferredOrientations([
+  //     DeviceOrientation.portraitUp,
+  //     DeviceOrientation.landscapeLeft,
+  //     DeviceOrientation.landscapeRight,
+  //   ]);
+
+  // }
+
   @override
   Widget build(context) {
     final bool isDarkMode = widget.isDarkMode;
+    final bool isPortrait = widget.isPortrait;
+
+    double sizeWidth = MediaQuery.of(context).size.width;
+    double sizeHeight = MediaQuery.of(context).size.height;
 
     bgColor = isDarkMode ? Colors.black : Colors.white;
     buttonColor =
@@ -97,24 +144,32 @@ class _Calc extends State<Calc> {
             ? Color.fromARGB(187, 33, 33, 33)
             : Color.fromARGB(189, 255, 255, 255);
     textColor = isDarkMode ? Colors.white : Colors.black;
-    double sizeWidth = MediaQuery.of(context).size.width;
-    double sizeHeight = MediaQuery.of(context).size.height;
+    textSize = isPortrait ? 50 : 30;
+    screenHeight = isPortrait ? sizeHeight * 0.215 : sizeHeight * 0.1;
+    screenWidth = isPortrait ? sizeWidth * 0.95 : sizeWidth * 0.85;
+    resultScreenHeight = isPortrait ? sizeHeight * 0.09 : sizeHeight * 0.085;
+
     return Column(
       children: [
+        isPortrait ? SizedBox(height: 0) : SizedBox(height: 15),
         SizedBox(
-          height: sizeHeight * 0.215,
-          width: sizeWidth * 0.95,
+          height: screenHeight,
+          width: screenWidth,
 
           child: Container(
             color: bgColor,
             alignment: Alignment.bottomRight,
             child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+              scrollDirection: isPortrait ? Axis.vertical : Axis.horizontal,
               reverse: true,
               child: Text(
-                input,
+                input
+                    .replaceAll('pi', 'π')
+                    .replaceAll('*', 'x')
+                    .replaceAll('/', '÷')
+                    .replaceAll('sqrt', '√'),
                 style: TextStyle(
-                  fontSize: 50,
+                  fontSize: textSize,
                   fontWeight: FontWeight.bold,
                   color: textColor,
                 ),
@@ -123,8 +178,8 @@ class _Calc extends State<Calc> {
           ),
         ),
         SizedBox(
-          height: sizeHeight * 0.09,
-          width: sizeWidth * 0.95,
+          height: resultScreenHeight,
+          width: screenWidth,
 
           child: Container(
             color: bgColor,
@@ -135,7 +190,7 @@ class _Calc extends State<Calc> {
               child: Text(
                 result,
                 style: TextStyle(
-                  fontSize: 50,
+                  fontSize: textSize,
                   fontWeight: FontWeight.bold,
                   color: textColor,
                 ),
@@ -144,176 +199,30 @@ class _Calc extends State<Calc> {
           ),
         ),
 
-        SizedBox(height: 25),
-        Row(
-          children: [
-            SizedBox(width:15 ),
-            Button('extendOperation', 'assets/icons/expand.svg', Colors.blue, textColor, () {}),
-            SizedBox(width: 15,),
-            Button('AC', 'null', Color.fromARGB(255, 231, 26, 11), textColor, () {
-              allClear();
-            }),
-            SizedBox(width: 15,)
-          ],
-        ),
-
-        SizedBox(height: 15),
-        Column(
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 15, height: 15),
-                Button(
-                  '/',
-                  'assets/icons/division.svg',
-                  Colors.greenAccent,
-                  textColor,
-                  () {
-                    characters("/");
-                  },
-                ),
-                SizedBox(width: 15, height: 15),
-                Button(
-                  '*',
-                  'assets/icons/multiplication.svg',
-                  Colors.greenAccent,
-                  textColor,
-                  () {
-                    characters("*");
-                  },
-                ),
-                SizedBox(width: 15, height: 15),
-                Button(
-                  '+',
-                  'assets/icons/plus.svg',
-                  Colors.greenAccent,
-                  textColor,
-                  () {
-                    characters("+");
-                  },
-                ),
-                SizedBox(width: 15, height: 15),
-                Button(
-                  '-',
-                  'assets/icons/minus.svg',
-                  Colors.greenAccent,
-                  textColor,
-                  () {
-                    characters("-");
-                  },
-                ),
-              ],
+        SizedBox(height: isPortrait ? 25 : 15),
+        isPortrait
+            ? CalcPortrait(
+              input,
+              bgColor,
+              buttonColor,
+              textColor,
+              characters,
+              delete,
+              allClear,
+              calculation,
+              changePortraitToLandscape,
+            )
+            : CalcLandscape(
+              input,
+              bgColor,
+              buttonColor,
+              textColor,
+              characters,
+              delete,
+              allClear,
+              calculation,
+              changeLandscapeToPortrait,
             ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 15, height: 15),
-                Button('7', 'null', buttonColor, textColor, () {
-                  characters("7");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('8', 'null', buttonColor, textColor, () {
-                  characters("8");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('9', 'null', buttonColor, textColor, () {
-                  characters("9");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('(', 'null', Colors.greenAccent, textColor, () {
-                  characters("(");
-                }),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 15, height: 15),
-                Button('4', 'null', buttonColor, textColor, () {
-                  characters("4");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('5', 'null', buttonColor, textColor, () {
-                  characters("5");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('6', 'null', buttonColor, textColor, () {
-                  characters("6");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button(')', 'null', Colors.greenAccent, textColor, () {
-                  characters(")");
-                }),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 15, height: 15),
-                Button('1', 'null', buttonColor, textColor, () {
-                  characters("1");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('2', 'null', buttonColor, textColor, () {
-                  characters("2");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('3', 'null', buttonColor, textColor, () {
-                  characters("3");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('^', 'null', Colors.greenAccent, textColor, () {
-                  characters("^");
-                }),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 15, height: 15),
-                Button('.', 'null', buttonColor, textColor, () {
-                  characters(".");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button('0', 'null', buttonColor, textColor, () {
-                  characters("0");
-                }),
-
-                SizedBox(width: 15, height: 15),
-                Button(
-                  '=',
-                  'assets/icons/equal.svg',
-                  Color.fromARGB(255, 255, 208, 0),
-                  textColor,
-                  () {
-                    calculation();
-                  },
-                ),
-
-                SizedBox(width: 15, height: 15),
-                Button(
-                  'X',
-                  'assets/icons/backspace.svg',
-                  Colors.redAccent,
-                  textColor,
-                  () {
-                    delete();
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
       ],
     );
   }

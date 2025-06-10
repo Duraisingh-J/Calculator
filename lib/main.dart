@@ -1,84 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:calculator/calc.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/rendering.dart';
 
+void main() async {
+  //debugPaintSizeEnabled = true;
 
-void main() {
-  debugPaintSizeEnabled = true;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
-
-  @override
-  State<App> createState() {
-    return _App();
-  }
-}
-
-class _App extends State<App> {
-  bool isDarkMode = false;
-  Color bgColor = Colors.white;
-  Color buttonColor = Color.fromARGB(189, 255, 255, 255);
-  Color textColor = Colors.black;
-  String theme = 'assets/icons/lightmode.svg';
-
-  void changeIntoDark() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-      theme =
-          isDarkMode
-              ? 'assets/icons/darkmode.svg'
-              : 'assets/icons/lightmode.svg';
-      bgColor = isDarkMode ? Colors.black : Colors.white;
-      textColor = isDarkMode ? Colors.white : Colors.black;
-      buttonColor =
-          isDarkMode
-              ? Color.fromARGB(225, 33, 33, 33)
-              : Color.fromARGB(189, 255, 255, 255);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: bgColor,
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 5, 15),
-            child: SvgPicture.asset(
-              'assets/icons/calculate.svg',
-              color: textColor,
-              height: 40,
-              width: 40,
-            ),
-          ),
-          title: Text(
-            'Calculator',
-            style: TextStyle(color: textColor, fontSize: 25),
-            textAlign: TextAlign.start,
-          ),
-          titleSpacing: 0,
-          elevation: 0,
-          actions: [
-            ElevatedButton(
-              onPressed: changeIntoDark,
-              style: ElevatedButton.styleFrom(backgroundColor: buttonColor),
+      theme: ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white),
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+      ),
+      themeMode: ThemeMode.system,
+      home: const CalculateApp(),
+    );
+  }
+}
+
+class CalculateApp extends StatelessWidget {
+  const CalculateApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    Color bgColor = isDarkMode ? Colors.black : Colors.white;
+    Color textColor = isDarkMode ? Colors.white : Colors.black;
+
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    return isPortrait
+        ? Scaffold(
+          appBar: AppBar(
+            backgroundColor: bgColor,
+            leading: Padding(
+              padding:
+                  isPortrait
+                      ? EdgeInsets.fromLTRB(15, 15, 5, 15)
+                      : EdgeInsets.fromLTRB(5, 5, 2, 5),
               child: SvgPicture.asset(
-                theme,
-                height: 25,
-                colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+                'assets/icons/calculate.svg',
+                // ignore: deprecated_member_use
+                color: textColor,
+                height: 40,
+                width: 40,
               ),
             ),
-          ],
-          actionsPadding: EdgeInsets.all(10),
-        ),
-        body: Calc(isDarkMode),
-        backgroundColor: bgColor,
-      ),
-    );
+            title: Text(
+              'Calculator',
+              style: TextStyle(color: textColor, fontSize: 25),
+              textAlign: TextAlign.start,
+            ),
+            titleSpacing: 0,
+            elevation: 0,
+          ),
+          body: Calc(isDarkMode, isPortrait),
+          backgroundColor: bgColor,
+        )
+        : Scaffold(body: Calc(isDarkMode, isPortrait));
   }
 }
