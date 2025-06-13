@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:calculator/buttons.dart';
-import 'package:flutter/services.dart';
 
 // ignore: must_be_immutable
 class CalcPortrait extends StatefulWidget {
@@ -90,7 +89,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '/',
                 'assets/icons/division.svg',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -103,7 +102,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '*',
                 'assets/icons/multiplication.svg',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -116,7 +115,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '+',
                 'assets/icons/plus.svg',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -129,7 +128,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '-',
                 'assets/icons/minus.svg',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -162,7 +161,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '(',
                 'null',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -195,7 +194,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 ')',
                 'null',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
@@ -228,7 +227,7 @@ class _CalcPortrait extends State<CalcPortrait> {
               Button(
                 '^',
                 'null',
-                Colors.greenAccent,
+                const Color.fromARGB(212, 0, 255, 81),
                 widget.textColor,
                 25,
                 0.2,
