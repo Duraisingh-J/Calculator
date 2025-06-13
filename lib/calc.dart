@@ -25,6 +25,7 @@ class _Calc extends State<Calc> {
   RegExp decimalPointPattern = RegExp(r'\.{2,}|\.$');
   RegExp numberLimit = RegExp(r'\d+');
   RegExp trignometricPattern = RegExp(r'(sin|cos|tan)\(([^()]+)\)');
+  RegExp logarithmicPattern = RegExp(r'(log)\(([^()]+)\)');
   Color bgColor = Colors.white;
   Color buttonColor = Color.fromARGB(189, 255, 255, 255);
   Color textColor = Colors.black;
@@ -73,13 +74,17 @@ class _Calc extends State<Calc> {
       // ignore: deprecated_member_use
       Parser p = Parser();
       Expression exp = p.parse(
-        input.replaceAll('x', '*').replaceAllMapped(trignometricPattern, (
-          match,
-        ) {
-          final func = match.group(1)!;
-          final angleInDegrees = match.group(2);
-          return "$func(($angleInDegrees) * (pi/180))";
-        }),
+        input
+            .replaceAll('x', '*')
+            .replaceAllMapped(trignometricPattern, (match) {
+              final func = match.group(1)!;
+              final angleInDegrees = match.group(2);
+              return "$func(($angleInDegrees) * (pi/180))";
+            })
+            .replaceAllMapped(logarithmicPattern, (match) {
+              final value = match.group(2);
+              return "ln($value) / ln(10)";
+            }),
       );
 
       ContextModel cm = ContextModel();

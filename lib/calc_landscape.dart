@@ -390,7 +390,7 @@ class _CalcLandscape extends State<CalcLandscape> {
                 0.09,
                 45,
                 () {
-                  widget.characters("ln()/ln(10)");
+                  widget.characters("log");
                 },
               ),
               SizedBox(width: 15, height: 15),
