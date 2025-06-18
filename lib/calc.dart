@@ -126,15 +126,6 @@ class _Calc extends State<Calc> {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  // void resetOrientation() async {
-  //   await SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //     DeviceOrientation.landscapeLeft,
-  //     DeviceOrientation.landscapeRight,
-  //   ]);
-
-  // }
-
   @override
   Widget build(context) {
     final bool isDarkMode = widget.isDarkMode;

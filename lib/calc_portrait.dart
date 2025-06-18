@@ -39,7 +39,7 @@ class _CalcPortrait extends State<CalcPortrait> {
 
   //   WidgetsBinding.instance.addPostFrameCallback((_) async {
   //     await SystemChrome.setPreferredOrientations([
-        
+
   //       DeviceOrientation.landscapeLeft,
   //       DeviceOrientation.landscapeRight,
   //       DeviceOrientation.portraitUp,
@@ -143,31 +143,180 @@ class _CalcPortrait extends State<CalcPortrait> {
           Row(
             children: [
               SizedBox(width: 15, height: 15),
-              Button('7', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("7");
-              }),
-
-              SizedBox(width: 15, height: 15),
-              Button('8', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("8");
-              }),
-
-              SizedBox(width: 15, height: 15),
-              Button('9', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("9");
-              }),
-
-              SizedBox(width: 15, height: 15),
               Button(
-                '(',
+                '7',
                 'null',
-                const Color.fromARGB(212, 0, 255, 81),
+                widget.buttonColor,
                 widget.textColor,
                 25,
                 0.2,
                 60,
                 () {
-                  widget.characters("(");
+                  widget.characters("7");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Button(
+                '8',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("8");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Button(
+                '9',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("9");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Builder(
+                builder: (context) {
+                  return  Button(
+                    '(',
+                    'null',
+                    const Color.fromARGB(212, 0, 255, 81),
+                    widget.textColor,
+                    25,
+                    0.2,
+                    60,
+                    () async {
+                      final RenderBox button =
+                          context.findRenderObject() as RenderBox;
+                      final overlay =
+                          Overlay.of(context).context.findRenderObject()
+                              as RenderBox;
+                      final position = RelativeRect.fromRect(
+                        Rect.fromPoints(
+                          button.localToGlobal(Offset.zero, ancestor: overlay),
+                          button.localToGlobal(
+                            button.size.bottomRight(Offset.zero),
+                            ancestor: overlay,
+                          ),
+                        ),
+                        Offset.zero & overlay.size,
+                      );
+                      final selected = await showMenu(
+                        context: context,
+                        position: position,
+                        items: [
+                          PopupMenuItem(value: '(', child: Text('(')),
+                          PopupMenuItem(value: '{', child: Text('{')),
+                          PopupMenuItem(value: '[', child: Text('[')),
+                        ],
+                      );
+
+                      if (!mounted || selected == null) return;
+
+                      widget.characters(selected);
+                    },
+                  );
+                }
+              ),
+            ],
+          ),
+          SizedBox(height: 15),
+          Row(
+            children: [
+              SizedBox(width: 15, height: 15),
+              Button(
+                '4',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("4");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Button(
+                '5',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("5");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Button(
+                '6',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("6");
+                },
+              ),
+
+              SizedBox(width: 15, height: 15),
+              Builder(
+                builder: (context) {
+                  return Button(
+                    ')',
+                    'null',
+                    const Color.fromARGB(212, 0, 255, 81),
+                    widget.textColor,
+                    25,
+                    0.2,
+                    60,
+                    () async {
+                      final RenderBox button =
+                          context.findRenderObject() as RenderBox;
+                      final overlay =
+                          Overlay.of(context).context.findRenderObject()
+                              as RenderBox;
+                      final position = RelativeRect.fromRect(
+                        Rect.fromPoints(
+                          button.localToGlobal(Offset.zero, ancestor: overlay),
+                          button.localToGlobal(
+                            button.size.bottomRight(Offset.zero),
+                            ancestor: overlay,
+                          ),
+                        ),
+                        Offset.zero & overlay.size,
+                      );
+                      final selected = await showMenu(
+                        context: context,
+                        position: position,
+                        items: [
+                          PopupMenuItem(value: ')', child: Text(')')),
+                          PopupMenuItem(value: '}', child: Text('}')),
+                          PopupMenuItem(value: ']', child: Text(']')),
+                        ],
+                      );
+
+                      if (!mounted || selected == null) return;
+
+                      widget.characters(selected);
+                    },
+                  );
                 },
               ),
             ],
@@ -176,52 +325,46 @@ class _CalcPortrait extends State<CalcPortrait> {
           Row(
             children: [
               SizedBox(width: 15, height: 15),
-              Button('4', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("4");
-              }),
-
-              SizedBox(width: 15, height: 15),
-              Button('5', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("5");
-              }),
-
-              SizedBox(width: 15, height: 15),
-              Button('6', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("6");
-              }),
-
-              SizedBox(width: 15, height: 15),
               Button(
-                ')',
+                '1',
                 'null',
-                const Color.fromARGB(212, 0, 255, 81),
+                widget.buttonColor,
                 widget.textColor,
                 25,
                 0.2,
                 60,
                 () {
-                  widget.characters(")");
+                  widget.characters("1");
                 },
               ),
-            ],
-          ),
-          SizedBox(height: 15),
-          Row(
-            children: [
-              SizedBox(width: 15, height: 15),
-              Button('1', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("1");
-              }),
 
               SizedBox(width: 15, height: 15),
-              Button('2', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("2");
-              }),
+              Button(
+                '2',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("2");
+                },
+              ),
 
               SizedBox(width: 15, height: 15),
-              Button('3', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("3");
-              }),
+              Button(
+                '3',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("3");
+                },
+              ),
 
               SizedBox(width: 15, height: 15),
               Button(
@@ -242,14 +385,32 @@ class _CalcPortrait extends State<CalcPortrait> {
           Row(
             children: [
               SizedBox(width: 15, height: 15),
-              Button('.', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters(".");
-              }),
+              Button(
+                '.',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters(".");
+                },
+              ),
 
               SizedBox(width: 15, height: 15),
-              Button('0', 'null', widget.buttonColor, widget.textColor, 25, 0.2, 60, () {
-                widget.characters("0");
-              }),
+              Button(
+                '0',
+                'null',
+                widget.buttonColor,
+                widget.textColor,
+                25,
+                0.2,
+                60,
+                () {
+                  widget.characters("0");
+                },
+              ),
 
               SizedBox(width: 15, height: 15),
               Button(
