@@ -209,16 +209,48 @@ class _CalcLandscape extends State<CalcLandscape> {
             children: [
               SizedBox(width: 60),
 
-              Button(
-                '(',
-                'null',
-                const Color.fromARGB(212, 0, 255, 81),
-                widget.textColor,
-                27,
-                0.09,
-                45,
-                () {
-                  widget.characters("(");
+              Builder(
+                builder: (context) {
+                  return Button(
+                    '(',
+                    'null',
+                    const Color.fromARGB(212, 0, 255, 81),
+                    widget.textColor,
+                    27,
+                    0.09,
+                    45,
+                    () async {
+                      final RenderBox button =
+                          context.findRenderObject() as RenderBox;
+                      final overlay =
+                          Overlay.of(context).context.findRenderObject()
+                              as RenderBox;
+                      final position = RelativeRect.fromRect(
+                        Rect.fromPoints(
+                          button.localToGlobal(Offset.zero, ancestor: overlay),
+                          button.localToGlobal(
+                            button.size.bottomRight(Offset.zero),
+                            ancestor: overlay,
+                          ),
+                        ),
+                        Offset.zero & overlay.size,
+                      );
+
+                      final selected = await showMenu(
+                        context: context,
+                        position: position,
+                        items: [
+                          PopupMenuItem(value: '(', child: Text('(')),
+                          PopupMenuItem(value: '{', child: Text('{')),
+                          PopupMenuItem(value: '[', child: Text('[')),
+                        ],
+                      );
+
+                      if (!mounted || selected == null) return;
+
+                      widget.characters(selected);
+                    },
+                  );
                 },
               ),
               // DropdownButton(
@@ -228,7 +260,7 @@ class _CalcLandscape extends State<CalcLandscape> {
               //       widget.leftBrackets.map((bracket) {
               //         return DropdownMenuItem<String>(
               //           value: bracket,
-              //           child: Text(bracket),
+              //           value: '(',child: Text(bracket),
               //         );
               //       }).toList(),
               //   onChanged: (String? value) {
@@ -238,16 +270,48 @@ class _CalcLandscape extends State<CalcLandscape> {
               //   },
               // ),
               SizedBox(width: 15, height: 15),
-              Button(
-                ')',
-                'null',
-                const Color.fromARGB(212, 0, 255, 81),
-                widget.textColor,
-                27,
-                0.09,
-                45,
-                () {
-                  widget.characters(")");
+              Builder(
+                builder: (context) {
+                  return Button(
+                    ')',
+                    'null',
+                    const Color.fromARGB(212, 0, 255, 81),
+                    widget.textColor,
+                    27,
+                    0.09,
+                    45,
+                    () async {
+                      final RenderBox button =
+                          context.findRenderObject() as RenderBox;
+                      final overlay =
+                          Overlay.of(context).context.findRenderObject()
+                              as RenderBox;
+                      final position = RelativeRect.fromRect(
+                        Rect.fromPoints(
+                          button.localToGlobal(Offset.zero, ancestor: overlay),
+                          button.localToGlobal(
+                            button.size.bottomRight(Offset.zero),
+                            ancestor: overlay,
+                          ),
+                        ),
+                        Offset.zero & overlay.size,
+                      );
+
+                      final selected = await showMenu(
+                        context: context,
+                        position: position,
+                        items: [
+                          PopupMenuItem(value: ')', child: Text(')')),
+                          PopupMenuItem(value: '}', child: Text('}')),
+                          PopupMenuItem(value: ']', child: Text(']')),
+                        ],
+                      );
+
+                      if (!mounted || selected == null) return;
+
+                      widget.characters(selected);
+                    },
+                  );
                 },
               ),
               SizedBox(width: 15, height: 15),
